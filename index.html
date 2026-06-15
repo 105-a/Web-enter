@@ -157,6 +157,9 @@
       font-weight:400;
       letter-spacing:.14em;
       line-height:1.35;
+      cursor:default;
+      user-select:none;
+      -webkit-user-select:none;
     }
 
     .lead{
@@ -200,8 +203,9 @@
       display:grid;
       place-items:center;
       padding:38px 34px;
-      transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease;
+      transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease, background .9s ease, backdrop-filter .9s ease;
       backdrop-filter:blur(8px);
+      isolation:isolate;
     }
 
     .portal-card:hover{
@@ -214,6 +218,7 @@
       content:"";
       position:absolute;
       inset:0;
+      z-index:0;
       background:
         radial-gradient(circle at 18% 12%,rgba(255,255,255,.65),transparent 24%),
         radial-gradient(circle at 80% 12%,rgba(206,172,111,.20),transparent 28%);
@@ -224,6 +229,7 @@
       content:"";
       position:absolute;
       inset:12px;
+      z-index:3;
       border:1px solid rgba(93,70,47,.09);
       border-radius:17px;
       pointer-events:none;
@@ -247,6 +253,7 @@
 
     .card-gallery .newspaper{
       position:absolute;
+      z-index:1;
       left:0;
       top:0;
       width:45%;
@@ -261,6 +268,7 @@
 
     .card-gallery .mountain{
       position:absolute;
+      z-index:1;
       right:-20px;
       bottom:0;
       width:62%;
@@ -275,6 +283,7 @@
 
     .botanical-card{
       position:absolute;
+      z-index:1;
       inset:auto auto 0 0;
       width:44%;
       opacity:.34;
@@ -292,7 +301,7 @@
 
     .card-inner{
       position:relative;
-      z-index:1;
+      z-index:2;
       text-align:center;
       max-width:430px;
     }
@@ -453,9 +462,487 @@
       .desc{font-size:13px;line-height:1.85}
       .button{min-width:220px;height:48px;font-size:13px}
     }
+
+
+    /* --- motion upgrade: warm + technical --- */
+    :root{
+      --glow:rgba(219,178,111,.38);
+      --deep-green:#56664e;
+      --rose:#c58d72;
+    }
+
+    ::selection{background:rgba(185,147,96,.26)}
+
+    .skip-link{
+      position:fixed;
+      left:18px;
+      top:18px;
+      z-index:99;
+      transform:translateY(-160%);
+      padding:10px 16px;
+      border-radius:999px;
+      background:#fff8ed;
+      box-shadow:var(--soft);
+      transition:.25s ease;
+    }
+    .skip-link:focus{transform:translateY(0)}
+
+    .ambient{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      overflow:hidden;
+    }
+    .orb{
+      position:absolute;
+      width:36vw;
+      aspect-ratio:1;
+      border-radius:999px;
+      filter:blur(52px);
+      opacity:.25;
+      animation:floatOrb 18s ease-in-out infinite alternate;
+      transform:translate3d(0,0,0);
+    }
+    .orb.one{left:-12vw;top:10vh;background:#d7c08c}
+    .orb.two{right:-10vw;top:28vh;background:#8a9a70;animation-delay:-6s;animation-duration:22s}
+    .orb.three{left:32vw;bottom:-18vw;background:#d0a36b;animation-delay:-11s;animation-duration:24s}
+
+    @keyframes floatOrb{
+      from{transform:translate3d(-2%,2%,0) scale(.94)}
+      to{transform:translate3d(4%,-4%,0) scale(1.08)}
+    }
+
+    .fireflies{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      overflow:hidden;
+    }
+    .firefly{
+      position:absolute;
+      left:var(--x);
+      top:var(--y);
+      width:var(--s);
+      height:var(--s);
+      border-radius:50%;
+      background:rgba(255,232,170,.95);
+      box-shadow:0 0 18px rgba(255,220,142,.8), 0 0 42px rgba(185,147,96,.28);
+      opacity:.56;
+      animation:drift var(--d) ease-in-out infinite alternate;
+      animation-delay:var(--delay);
+    }
+    @keyframes drift{
+      0%{transform:translate3d(0,0,0);opacity:.2}
+      45%{opacity:.72}
+      100%{transform:translate3d(var(--tx),var(--ty),0);opacity:.35}
+    }
+
+    .topbar{
+      transform:translateY(-10px);
+      opacity:0;
+      animation:enterTop .9s ease .12s forwards;
+    }
+    @keyframes enterTop{to{transform:none;opacity:1}}
+
+    .hero > *{
+      opacity:0;
+      transform:translateY(16px);
+      animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .hero .small-line{animation-delay:.12s}
+    .hero h1{animation-delay:.22s}
+    .hero .lead{animation-delay:.34s}
+    .hero .script{animation-delay:.48s}
+    @keyframes rise{to{opacity:1;transform:none}}
+
+    .hero h1{
+      background:linear-gradient(100deg,#2f241d 0%,#72583b 40%,#9a7447 52%,#2f241d 72%);
+      background-size:240% 100%;
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      animation:rise .9s cubic-bezier(.2,.8,.2,1) .22s forwards, titleSheen 7s ease-in-out 1.4s infinite;
+    }
+    @keyframes titleSheen{
+      0%,72%,100%{background-position:0% 50%}
+      38%{background-position:100% 50%}
+    }
+
+    .typing-note{
+      min-height:30px;
+      margin:18px auto 0;
+      color:#745f47;
+      font-size:14px;
+      letter-spacing:.12em;
+      opacity:.86;
+    }
+    .typing-note::after{
+      content:"";
+      display:inline-block;
+      width:1px;
+      height:1.1em;
+      margin-left:4px;
+      vertical-align:-.16em;
+      background:#9b794e;
+      animation:blink 1s steps(2,end) infinite;
+    }
+    @keyframes blink{50%{opacity:0}}
+
+    .status-panel{
+      position:relative;
+      z-index:2;
+      width:min(960px,100%);
+      margin:38px auto 0;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+    .status-item{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(91,69,47,.14);
+      border-radius:20px;
+      padding:18px 18px 16px;
+      background:rgba(255,250,240,.52);
+      box-shadow:var(--soft);
+      backdrop-filter:blur(9px);
+      transform:translateY(18px);
+      opacity:0;
+      transition:.55s cubic-bezier(.2,.8,.2,1);
+    }
+    .status-item.visible{transform:none;opacity:1}
+    .status-item::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(110deg,transparent,rgba(255,255,255,.46),transparent);
+      transform:translateX(-120%);
+      animation:panelShine 7s ease-in-out infinite;
+    }
+    .status-item:nth-child(2)::before{animation-delay:1.4s}
+    .status-item:nth-child(3)::before{animation-delay:2.8s}
+    @keyframes panelShine{0%,78%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+    .status-kicker{font-size:11px;letter-spacing:.18em;color:#8a7762;margin-bottom:9px}
+    .status-value{font-size:26px;letter-spacing:.08em;color:#4a3829}
+    .status-text{margin-top:8px;font-size:12px;line-height:1.75;color:#766858;letter-spacing:.08em}
+
+    .portal-card{
+      transform-style:preserve-3d;
+      will-change:transform;
+    }
+    .portal-card.reveal{
+      opacity:0;
+      transform:translateY(38px) scale(.98);
+    }
+    .portal-card.reveal.visible{
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+    .portal-card .icon,.portal-card h2,.portal-card .button{transform:translateZ(28px)}
+
+    .portal-card .button::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background:linear-gradient(100deg,transparent,rgba(255,255,255,.38),transparent);
+      transform:translateX(-130%);
+      transition:.55s ease;
+    }
+    .button{position:relative;overflow:hidden}
+    .portal-card:hover .button::after{transform:translateX(130%)}
+
+    .pulse-ring{
+      position:absolute;
+      z-index:2;
+      inset:22px;
+      border-radius:20px;
+      border:1px solid rgba(185,147,96,.0);
+      pointer-events:none;
+      animation:pulseRing 3.8s ease-in-out infinite;
+    }
+    .card-gallery .pulse-ring{animation-delay:1s}
+    @keyframes pulseRing{
+      0%,100%{transform:scale(.985);border-color:rgba(185,147,96,0)}
+      48%{transform:scale(1.015);border-color:rgba(185,147,96,.22)}
+    }
+
+    .warm-section{
+      position:relative;
+      z-index:2;
+      width:min(1040px,100%);
+      margin:32px auto 0;
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:24px;
+      align-items:stretch;
+    }
+    .message-card,.tech-card{
+      border:1px solid rgba(91,69,47,.15);
+      border-radius:24px;
+      background:rgba(255,250,240,.58);
+      box-shadow:var(--soft);
+      backdrop-filter:blur(9px);
+      padding:28px;
+      overflow:hidden;
+      position:relative;
+    }
+    .message-card::before,.tech-card::before{
+      content:"";
+      position:absolute;
+      width:200px;
+      height:200px;
+      right:-72px;
+      top:-80px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(212,183,134,.26),transparent 68%);
+    }
+    .section-label{font-size:12px;letter-spacing:.22em;color:#8f785d;margin-bottom:14px}
+    .message-card h3,.tech-card h3{margin:0 0 12px;font-weight:400;font-size:25px;letter-spacing:.1em;line-height:1.55}
+    .message-card p,.tech-card p{margin:0;color:#716253;font-size:14px;line-height:2;letter-spacing:.08em}
+    .tech-list{display:grid;gap:10px;margin-top:18px}
+    .tech-chip{
+      display:flex;align-items:center;gap:10px;
+      font-size:12px;letter-spacing:.1em;color:#5e4a39;
+    }
+    .tech-chip i{width:9px;height:9px;border-radius:50%;background:#8d946f;box-shadow:0 0 12px rgba(117,128,96,.55)}
+
+    .cursor-light{
+      position:fixed;
+      width:220px;
+      height:220px;
+      left:0;
+      top:0;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:3;
+      background:radial-gradient(circle,rgba(255,229,176,.26),transparent 64%);
+      transform:translate(-50%,-50%);
+      opacity:0;
+      transition:opacity .28s ease;
+      mix-blend-mode:soft-light;
+    }
+
+    @media(max-width:900px){
+      .status-panel{grid-template-columns:1fr;gap:12px;margin-top:30px}
+      .warm-section{grid-template-columns:1fr}
+    }
+    @media(max-width:480px){
+      .typing-note{font-size:12px;line-height:1.8}
+      .status-value{font-size:22px}
+      .message-card,.tech-card{padding:22px 18px}
+      .message-card h3,.tech-card h3{font-size:21px}
+    }
+
+
+
+    .secret-garden{
+      position:fixed;
+      left:50%;
+      bottom:28px;
+      transform:translate(-50%,20px);
+      z-index:30;
+      min-width:min(420px,calc(100vw - 36px));
+      padding:14px 22px;
+      border:1px solid rgba(118,91,61,.18);
+      border-radius:999px;
+      background:rgba(255,250,240,.82);
+      box-shadow:0 18px 48px rgba(67,48,31,.16);
+      backdrop-filter:blur(10px);
+      color:#594536;
+      text-align:center;
+      font-size:13px;
+      line-height:1.8;
+      letter-spacing:.1em;
+      opacity:0;
+      pointer-events:none;
+      transition:.45s ease;
+    }
+
+    .secret-garden.show{
+      opacity:1;
+      transform:translate(-50%,0);
+    }
+
+    .tiny-secret{
+      position:fixed;
+      right:28px;
+      bottom:28px;
+      z-index:26;
+      width:38px;
+      height:38px;
+      border:1px solid rgba(118,91,61,.18);
+      border-radius:50%;
+      background:rgba(255,250,240,.58);
+      color:#a98f68;
+      box-shadow:0 12px 34px rgba(67,48,31,.10);
+      cursor:pointer;
+      transition:.25s ease;
+    }
+
+    .tiny-secret:hover{
+      transform:rotate(18deg) scale(1.08);
+      background:rgba(255,250,240,.86);
+    }
+
+    .petal-pop{
+      position:fixed;
+      z-index:28;
+      left:0;
+      top:0;
+      width:8px;
+      height:12px;
+      border-radius:8px 8px 8px 1px;
+      background:rgba(212,183,134,.75);
+      pointer-events:none;
+      transform:translate(var(--x),var(--y)) rotate(0deg);
+      animation:petalPop 1.8s ease-out forwards;
+    }
+
+    @keyframes petalPop{
+      0%{opacity:0;transform:translate(var(--x),var(--y)) rotate(0deg) scale(.4)}
+      20%{opacity:1}
+      100%{opacity:0;transform:translate(calc(var(--x) + var(--dx)),calc(var(--y) + var(--dy))) rotate(220deg) scale(1)}
+    }
+
+    .forest-signal{
+      position:fixed;
+      z-index:29;
+      right:22px;
+      top:82px;
+      width:54px;
+      height:54px;
+      border:1px solid rgba(118,91,61,.18);
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      color:#6f7258;
+      background:rgba(255,250,240,.76);
+      box-shadow:0 16px 42px rgba(67,48,31,.16);
+      filter:drop-shadow(0 10px 16px rgba(67,48,31,.12));
+      animation:signalFloat 3.2s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .forest-signal::before{
+      content:"✦";
+      font-size:24px;
+      line-height:1;
+    }
+
+    @keyframes signalFloat{
+      0%,100%{transform:translateY(0) rotate(-6deg)}
+      50%{transform:translateY(-10px) rotate(5deg)}
+    }
+
+    .rain-mood{
+      position:fixed;
+      inset:0;
+      z-index:22;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity 1.8s ease;
+      background:
+        radial-gradient(circle at 52% 0%,rgba(255,255,255,.08),transparent 34%),
+        linear-gradient(180deg,rgba(30,39,44,.40),rgba(37,47,44,.28) 44%,rgba(49,44,38,.22));
+      mix-blend-mode:multiply;
+      backdrop-filter:saturate(.78) brightness(.92);
+    }
+
+    body.rainy .rain-mood{opacity:.44}
+
+    body.rainy .portal-card{
+      background:
+        linear-gradient(180deg,rgba(255,252,244,.97),rgba(248,241,229,.94)),
+        rgba(255,249,238,.98);
+      backdrop-filter:blur(11px);
+    }
+
+    body.rainy .card-calendar{
+      background:
+        linear-gradient(180deg,rgba(255,252,244,.98),rgba(248,241,229,.95)),
+        radial-gradient(circle at 10% 15%,rgba(126,143,98,.18),transparent 26%),
+        radial-gradient(circle at 84% 24%,rgba(202,156,82,.17),transparent 25%),
+        rgba(255,249,238,.98);
+    }
+
+    body.rainy .card-gallery{
+      background:
+        linear-gradient(90deg,rgba(251,247,239,.98),rgba(247,241,230,.95)),
+        radial-gradient(circle at 82% 52%,rgba(89,87,78,.16),transparent 35%),
+        linear-gradient(135deg,rgba(104,96,82,.08),rgba(255,255,255,.14)),
+        rgba(245,238,225,.98);
+    }
+
+    body.rainy .portal-card::before{
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.56),rgba(255,250,240,.36)),
+        radial-gradient(circle at 18% 12%,rgba(255,255,255,.68),transparent 24%),
+        radial-gradient(circle at 80% 12%,rgba(206,172,111,.13),transparent 28%);
+    }
+
+    .rain-drop{
+      position:fixed;
+      z-index:1;
+      top:-34px;
+      left:var(--x);
+      width:1px;
+      height:var(--h);
+      border-radius:999px;
+      background:linear-gradient(180deg,rgba(218,232,221,.04),rgba(116,139,132,.62));
+      pointer-events:none;
+      opacity:.72;
+      animation:forestRain var(--d) linear forwards;
+      animation-delay:var(--delay);
+      box-shadow:0 0 10px rgba(176,196,186,.18);
+    }
+
+    @keyframes forestRain{
+      from{transform:translate3d(0,-48px,0) rotate(12deg);opacity:0}
+      18%{opacity:.72}
+      82%{opacity:.64}
+      to{transform:translate3d(-46px,112vh,0) rotate(12deg);opacity:0}
+    }
+
+
+    .window-rain-drop{
+      position:fixed;
+      z-index:23;
+      left:var(--x);
+      top:var(--y);
+      width:var(--w);
+      height:var(--h);
+      border-radius:999px;
+      pointer-events:none;
+      opacity:0;
+      background:linear-gradient(180deg,rgba(238,247,242,.45),rgba(145,168,162,.18));
+      box-shadow:inset 0 1px 2px rgba(255,255,255,.42), 0 5px 10px rgba(32,43,45,.10);
+      animation:windowDropSlide var(--d) ease-in forwards;
+      animation-delay:var(--delay);
+      backdrop-filter:blur(.6px);
+    }
+
+    @keyframes windowDropSlide{
+      0%{opacity:0;transform:translate3d(0,0,0) scale(.78)}
+      18%{opacity:.42}
+      72%{opacity:.32}
+      100%{opacity:0;transform:translate3d(var(--sx),var(--sy),0) scale(.9)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+      .cursor-light,.fireflies,.ambient,.rain-drop,.rain-mood,.window-rain-drop{display:none}
+    }
+
   </style>
 </head>
-<body>
+<body id="top">
+  <a class="skip-link" href="#links">入口カードへ移動</a>
+  <div class="ambient" aria-hidden="true"><span class="orb one"></span><span class="orb two"></span><span class="orb three"></span></div>
+  <div class="fireflies" aria-hidden="true"></div>
+  <div class="rain-mood" aria-hidden="true"></div>
+  <div class="cursor-light" aria-hidden="true"></div>
   <svg class="plant top-shadow" viewBox="0 0 240 240" aria-hidden="true">
     <path d="M24 190C62 126 91 77 151 24" stroke="currentColor" stroke-width="2" fill="none"/>
     <ellipse cx="72" cy="78" rx="20" ry="48" fill="currentColor" transform="rotate(-39 72 78)"/>
@@ -516,10 +1003,11 @@
       <h1>十の色が、未来を紡ぐ。</h1>
       <p class="lead">地域の想いが集まり、学びや活動が広がっていく場所。<br />あなたの「関わりたい」を、ここから。</p>
       <div class="script">Forest of Ten Hues</div>
+      <div class="typing-note" data-phrases="ひとつの活動が、だれかの明日をそっと照らす。|森の入口から、地域の物語へ。|見つける、参加する、残していく。"></div>
     </section>
 
     <section class="cards" id="links" aria-label="サイト入口">
-      <a class="portal-card card-calendar" href="https://105-a.github.io/-/" target="_blank" rel="noopener noreferrer">
+      <a class="portal-card card-calendar reveal" href="https://105-a.github.io/-/" target="_blank" rel="noopener noreferrer">
         <svg class="botanical-card" viewBox="0 0 200 220" aria-hidden="true">
           <path d="M46 210C54 142 85 66 158 18" stroke="currentColor" stroke-width="2" fill="none"/>
           <ellipse cx="48" cy="70" rx="21" ry="46" fill="currentColor" opacity=".7" transform="rotate(-35 48 70)"/>
@@ -530,6 +1018,8 @@
           <path d="M64 210C72 142 99 70 164 20" stroke="currentColor" stroke-width="2" fill="none"/>
           <g fill="currentColor"><circle cx="160" cy="28" r="5"/><circle cx="140" cy="55" r="5"/><circle cx="164" cy="76" r="4"/><circle cx="119" cy="98" r="5"/><circle cx="143" cy="129" r="4"/><circle cx="101" cy="153" r="5"/></g>
         </svg>
+        <span class="pulse-ring" aria-hidden="true"></span>
+        <span class="pulse-ring" aria-hidden="true"></span>
         <div class="card-inner">
           <div class="icon" aria-hidden="true">
             <svg viewBox="0 0 64 64"><rect x="13" y="16" width="38" height="36" rx="3"/><path d="M13 25h38M23 11v10M41 11v10M23 33h4M32 33h4M41 33h4M23 42h4M32 42h4M41 42h4"/></svg>
@@ -543,7 +1033,7 @@
         </div>
       </a>
 
-      <a class="portal-card card-gallery" href="https://105-a.github.io/Ten-hues/" target="_blank" rel="noopener noreferrer">
+      <a class="portal-card card-gallery reveal" href="https://105-a.github.io/Ten-hues/" target="_blank" rel="noopener noreferrer">
         <span class="newspaper" aria-hidden="true"></span>
         <span class="mountain" aria-hidden="true"></span>
         <div class="card-inner">
@@ -560,11 +1050,316 @@
       </a>
     </section>
 
+
+    <div class="secret-garden" aria-live="polite" aria-atomic="true"></div>
+    <button class="tiny-secret" type="button" aria-label="小さな森の合図">＊</button>
+
     <footer class="bottom-copy">
       <div>つながる。ひろがる。いろどる。</div>
       <div class="bottom-script">Connect. Expand. Color.</div>
       <svg class="bottom-mark" viewBox="0 0 120 24" aria-hidden="true"><path d="M2 12h42M76 12h42" stroke="currentColor"/><path d="M60 4l5 8-5 8-5-8z" fill="none" stroke="currentColor"/><path d="M49 12h22" stroke="currentColor"/></svg>
     </footer>
   </main>
+
+  <script>
+    const fireflies = document.querySelector('.fireflies');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!reduceMotion && fireflies) {
+      for (let i = 0; i < 28; i += 1) {
+        const dot = document.createElement('span');
+        dot.className = 'firefly';
+        dot.style.setProperty('--x', `${Math.random() * 100}%`);
+        dot.style.setProperty('--y', `${Math.random() * 100}%`);
+        dot.style.setProperty('--s', `${Math.random() * 4 + 2}px`);
+        dot.style.setProperty('--tx', `${Math.random() * 120 - 60}px`);
+        dot.style.setProperty('--ty', `${Math.random() * 120 - 60}px`);
+        dot.style.setProperty('--d', `${Math.random() * 8 + 7}s`);
+        dot.style.setProperty('--delay', `${Math.random() * -9}s`);
+        fireflies.appendChild(dot);
+      }
+    }
+
+    const revealTargets = document.querySelectorAll('.reveal, .status-item');
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.18 });
+      revealTargets.forEach((target) => revealObserver.observe(target));
+    } else {
+      revealTargets.forEach((target) => target.classList.add('visible'));
+    }
+
+    const counters = document.querySelectorAll('[data-count]');
+    if ('IntersectionObserver' in window) {
+      const countObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const max = Number(el.dataset.count);
+          const suffix = max === 100 ? '%' : '+';
+          let start = null;
+          const duration = 1100;
+          const step = (time) => {
+            start ??= time;
+            const progress = Math.min((time - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = `${Math.round(max * eased)}${suffix}`;
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+          countObserver.unobserve(el);
+        });
+      }, { threshold: 0.6 });
+      counters.forEach((counter) => countObserver.observe(counter));
+    } else {
+      counters.forEach((counter) => {
+        const max = Number(counter.dataset.count);
+        counter.textContent = `${max}${max === 100 ? '%' : '+'}`;
+      });
+    }
+
+    const typing = document.querySelector('.typing-note');
+    const rainTypingMessage = 'おや？雨が降り始めたみたいですね。';
+    let typingRainHold = false;
+    let typingTimer = null;
+    let phrases = [];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+
+    const type = () => {
+      if (!typing || reduceMotion) return;
+      if (typingRainHold) {
+        typing.textContent = rainTypingMessage;
+        typingTimer = setTimeout(type, 900);
+        return;
+      }
+      const phrase = phrases[phraseIndex];
+      typing.textContent = phrase.slice(0, charIndex);
+      if (!deleting && charIndex < phrase.length) charIndex += 1;
+      else if (!deleting) deleting = true;
+      else if (charIndex > 0) charIndex -= 1;
+      else {
+        deleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+      }
+      const wait = deleting ? 36 : charIndex === phrase.length ? 1500 : 72;
+      typingTimer = setTimeout(type, wait);
+    };
+
+    if (typing && !reduceMotion) {
+      phrases = typing.dataset.phrases.split('|');
+      type();
+    } else if (typing) {
+      typing.textContent = typing.dataset.phrases.split('|')[0];
+    }
+
+    const setTypingRainHold = (active) => {
+      if (!typing) return;
+      typingRainHold = active;
+      if (active) {
+        clearTimeout(typingTimer);
+        typing.textContent = rainTypingMessage;
+        if (!reduceMotion) typingTimer = setTimeout(type, 900);
+      } else if (!reduceMotion) {
+        clearTimeout(typingTimer);
+        charIndex = 0;
+        deleting = false;
+        typingTimer = setTimeout(type, 420);
+      }
+    };
+
+    const light = document.querySelector('.cursor-light');
+    if (light && !reduceMotion) {
+      window.addEventListener('pointermove', (event) => {
+        light.style.opacity = '1';
+        light.style.left = `${event.clientX}px`;
+        light.style.top = `${event.clientY}px`;
+      }, { passive: true });
+      window.addEventListener('pointerleave', () => { light.style.opacity = '0'; });
+    }
+
+    document.querySelectorAll('.portal-card').forEach((card) => {
+      if (reduceMotion) return;
+      card.addEventListener('pointermove', (event) => {
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - 0.5;
+        const y = (event.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-8px) rotateX(${y * -5}deg) rotateY(${x * 7}deg)`;
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+
+    const secretBox = document.querySelector('.secret-garden');
+    const tinySecret = document.querySelector('.tiny-secret');
+    const secretMessages = [
+      '小ネタ：光っている粒を見つけたら、ホタルかもしれませんよ。',
+      '小ネタ：十人十色というのは、十如是(じゅうににょぜ)がルーツらしいですよ。',
+      '小ネタ：タイトルを3回押すと、いいことがあるかもしれません。',
+      '小ネタ：キーボードで MORI と打つと、雨が降ったり止んだりします。',
+      '小ネタ：このサイトは外部ライブラリなしで動いています。'
+    ];
+
+    const showSecret = (message) => {
+      if (!secretBox) return;
+      secretBox.textContent = message;
+      secretBox.classList.add('show');
+      clearTimeout(showSecret.timer);
+      showSecret.timer = setTimeout(() => secretBox.classList.remove('show'), 3600);
+    };
+
+    const makePetals = (x = window.innerWidth / 2, y = window.innerHeight / 2, count = 18) => {
+      if (reduceMotion) return;
+      for (let i = 0; i < count; i += 1) {
+        const petal = document.createElement('span');
+        petal.className = 'petal-pop';
+        petal.style.setProperty('--x', `${x}px`);
+        petal.style.setProperty('--y', `${y}px`);
+        petal.style.setProperty('--dx', `${Math.random() * 220 - 110}px`);
+        petal.style.setProperty('--dy', `${Math.random() * 180 - 60}px`);
+        petal.style.animationDelay = `${Math.random() * .18}s`;
+        document.body.appendChild(petal);
+        setTimeout(() => petal.remove(), 2100);
+      }
+    };
+
+    const isOverPortalArea = (x, y) => {
+      const cards = document.querySelector('.cards');
+      if (!cards) return false;
+      const rect = cards.getBoundingClientRect();
+      return x > rect.left - 28 && x < rect.right + 28 && y > rect.top - 34 && y < rect.bottom + 34;
+    };
+
+    const makeRainDrop = () => {
+      if (reduceMotion) return;
+      const drop = document.createElement('span');
+      drop.className = 'rain-drop';
+      drop.style.setProperty('--x', `${Math.random() * 104 - 2}vw`);
+      drop.style.setProperty('--h', `${Math.random() * 26 + 16}px`);
+      drop.style.setProperty('--d', `${Math.random() * .8 + 1.05}s`);
+      drop.style.setProperty('--delay', '0s');
+      document.body.appendChild(drop);
+      setTimeout(() => drop.remove(), 2600);
+    };
+
+    const makeWindowDrop = () => {
+      if (reduceMotion || rainLevel < .35) return;
+      let x = 0;
+      let y = 0;
+      for (let tries = 0; tries < 8; tries += 1) {
+        const side = Math.random();
+        x = side < .36 ? Math.random() * 22 : side < .72 ? 78 + Math.random() * 20 : Math.random() * 100;
+        y = side < .72 ? 10 + Math.random() * 76 : Math.random() * 18;
+        if (!isOverPortalArea(window.innerWidth * x / 100, window.innerHeight * y / 100)) break;
+      }
+      const drop = document.createElement('span');
+      drop.className = 'window-rain-drop';
+      drop.style.setProperty('--x', `${x}vw`);
+      drop.style.setProperty('--y', `${y}vh`);
+      drop.style.setProperty('--w', `${Math.random() * 3 + 3}px`);
+      drop.style.setProperty('--h', `${Math.random() * 22 + 18}px`);
+      drop.style.setProperty('--sx', `${Math.random() * 8 - 4}px`);
+      drop.style.setProperty('--sy', `${Math.random() * 70 + 52}px`);
+      drop.style.setProperty('--d', `${Math.random() * 2.4 + 3.8}s`);
+      drop.style.setProperty('--delay', '0s');
+      document.body.appendChild(drop);
+      setTimeout(() => drop.remove(), 7000);
+    };
+
+    let rainTimer = null;
+    let windowRainTimer = null;
+    let rainRamping = null;
+    let rainActive = false;
+    let rainLevel = 0;
+
+    const startRainLoop = () => {
+      if (!rainTimer) {
+        rainTimer = setInterval(() => {
+          if (rainLevel <= 0) return;
+          const drops = Math.max(1, Math.round(rainLevel * 9));
+          for (let i = 0; i < drops; i += 1) makeRainDrop();
+        }, 170);
+      }
+      if (!windowRainTimer) {
+        windowRainTimer = setInterval(() => {
+          if (rainLevel > .35 && Math.random() < .46) makeWindowDrop();
+        }, 720);
+      }
+    };
+
+    const setRain = (active) => {
+      rainActive = active;
+      setTypingRainHold(active);
+      if (reduceMotion) return;
+      document.body.classList.toggle('rainy', active);
+      clearInterval(rainRamping);
+      startRainLoop();
+
+      rainRamping = setInterval(() => {
+        rainLevel += active ? 0.055 : -0.045;
+        rainLevel = Math.max(0, Math.min(1, rainLevel));
+
+        if ((active && rainLevel >= 1) || (!active && rainLevel <= 0)) {
+          clearInterval(rainRamping);
+          rainRamping = null;
+          if (!active) {
+            clearInterval(rainTimer);
+            clearInterval(windowRainTimer);
+            rainTimer = null;
+            windowRainTimer = null;
+          }
+        }
+      }, 95);
+    };
+
+    tinySecret?.addEventListener('click', (event) => {
+      const message = secretMessages[Math.floor(Math.random() * secretMessages.length)];
+      showSecret(message);
+      makePetals(event.clientX, event.clientY, 14);
+    });
+
+    const titleSecretMessages = [
+      'そんなに気になりますか？ 照れちゃいますね。',
+      'また押しましたね。気になりますか？',
+      'そこまでおされると、会議を始めちゃいそうです。',
+      'もう完全に常連さんですね。',
+      'これ以上はもうネタがありません...'
+    ];
+
+    let titleClicks = 0;
+    document.querySelector('h1')?.addEventListener('click', (event) => {
+      titleClicks += 1;
+      makePetals(event.clientX, event.clientY, 6);
+      if (titleClicks >= 3 && titleClicks % 3 === 0) {
+        const messageIndex = Math.min(Math.floor(titleClicks / 3) - 1, titleSecretMessages.length - 1);
+        showSecret(titleSecretMessages[messageIndex]);
+      }
+    });
+
+    let keyTrail = '';
+    window.addEventListener('keydown', (event) => {
+      keyTrail = (keyTrail + event.key.toLowerCase()).slice(-4);
+      if (keyTrail === 'mori') {
+        const willRain = !rainActive;
+        setRain(willRain);
+        showSecret(willRain ? 'もう一度 MORI で止まります。' : '晴れましたね。');
+      }
+    });
+
+    document.querySelectorAll('.button').forEach((button) => {
+      button.addEventListener('pointerenter', () => showSecret('入口の先にも、物語が続いています。'));
+    });
+
+  </script>
+
 </body>
 </html>
